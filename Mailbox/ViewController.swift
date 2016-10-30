@@ -37,6 +37,13 @@ class ViewController: UIViewController {
     var messageSlideLeft: CGPoint!
     var messageHomeSlide: CGPoint!
     
+    //Colors
+    var yellowColorMail: UIColor = UIColor(red:0.98, green:0.82, blue:0.27, alpha:1.0)
+    var redColorMail: UIColor = UIColor(red:0.91, green:0.33, blue:0.23, alpha:1.0)
+    var greyColorMail: UIColor = UIColor(red:0.89, green:0.89, blue:0.89, alpha:1.0)
+    var brownColorMail: UIColor = UIColor(red:0.84, green:0.65, blue:0.47, alpha:1.0)
+    var greenColorMail: UIColor = UIColor(red:0.45, green:0.84, blue:0.41, alpha:1.0)
+    
     //Lifecyle methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +65,7 @@ class ViewController: UIViewController {
         messageSlideOffset = 60
         self.messageOriginalCenter = messageImageView.center
         messageSlideRight = CGPoint(x: messageImageView.center.x + messageSlideOffset,y: messageImageView.center.y)
-      messageSlideLeft = CGPoint(x: messageImageView.center.x - messageSlideOffset,y: messageImageView.center.y)
+        messageSlideLeft = CGPoint(x: messageImageView.center.x - messageSlideOffset,y: messageImageView.center.y)
         self.feedOriginalCenter = feedPanelView.center
         
         print("At launch: \(feedOriginalCenter)")
@@ -101,10 +108,6 @@ class ViewController: UIViewController {
     
     @IBAction func onMessagePanDrag(_ sender: UIPanGestureRecognizer) {
         
-        var yellowColorMail: UIColor = UIColor(red:0.98, green:0.82, blue:0.27, alpha:1.0)
-        var redColorMail: UIColor = UIColor(red:0.91, green:0.33, blue:0.23, alpha:1.0)
-        
-        
         // let velocity = sender.velocity(in: view)
         let translation = sender.translation(in: view)
         messageHomeSlide = CGPoint(x: messageOriginalCenter.x, y: messageOriginalCenter.y)
@@ -113,6 +116,32 @@ class ViewController: UIViewController {
             // self.feedOriginalCenter = self.feedPanelView.center
             
         } else if sender.state == .changed {
+            if translation.x > 0 && translation.x < 60 {
+                // show grey, sliding right
+                print("grey - sliding right")
+                self.messageContainerView.backgroundColor = greyColorMail
+            } else if translation.x >= 60 && translation.x < 200 {
+                // show green
+                print("green – sliding right")
+                self.messageContainerView.backgroundColor = greenColorMail
+            } else if translation.x >= 200 {
+                // show red
+                print("red – sliding right")
+                self.messageContainerView.backgroundColor = self.redColorMail
+            } else if translation.x < 0 && translation.x > -60 {
+                // show grey, sliding left
+                print("grey – sliding left")
+                self.messageContainerView.backgroundColor = greyColorMail
+            } else if translation.x <= -60 && translation.x > -200 {
+                // show yellow
+                print("yellow – sliding left")
+                self.messageContainerView.backgroundColor = self.yellowColorMail
+            } else if translation.x <= -200 {
+                // show brown
+                print("brown – sliding left")
+                self.messageContainerView.backgroundColor = self.brownColorMail
+            }
+            
             self.messageImageView.center = CGPoint(x: self.messageOriginalCenter.x + translation.x, y: self.messageOriginalCenter.y)
             
         } else if sender.state == .ended {
@@ -122,13 +151,11 @@ class ViewController: UIViewController {
                     print(self.messageOriginalCenter)
                     self.messageImageView.center = self.messageSlideLeft
                     print("After sliding: \(self.feedOriginalCenter)")
-                    self.messageContainerView.backgroundColor = yellowColorMail
                 }
             } else if translation.x > 0 {
                 UIView.animate(withDuration: 0.3) {
                     print("Message right")
                     self.messageImageView.center = self.messageSlideRight
-                    self.messageContainerView.backgroundColor = redColorMail
                 }
             }
         }
