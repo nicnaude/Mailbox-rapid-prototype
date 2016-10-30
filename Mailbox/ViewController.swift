@@ -17,12 +17,25 @@ class ViewController: UIViewController {
     @IBOutlet weak var messageImageView: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var feedPanelView: UIView!
+    @IBOutlet weak var archiveImageView: UIImageView!
+    @IBOutlet weak var deleteImageView: UIImageView!
+    @IBOutlet weak var messageContainerView: UIView!
+    @IBOutlet weak var listImageView: UIImageView!
+    @IBOutlet weak var laterImageView: UIImageView!
     
-    // Variables
+    
+    // Feed panel variables
     var feedOriginalCenter: CGPoint!
     var feedSlideOffset: CGFloat!
     var feedSlide: CGPoint!
     var feedHomeSlide: CGPoint!
+    
+    // Message panel variables
+    var messageOriginalCenter: CGPoint!
+    var messageSlideOffset: CGFloat!
+    var messageSlideRight: CGPoint!
+    var messageSlideLeft: CGPoint!
+    var messageHomeSlide: CGPoint!
     
     //Lifecyle methods
     override func viewDidLoad() {
@@ -30,12 +43,24 @@ class ViewController: UIViewController {
         // Hide items
         menuImageView.isHidden = true
         rescheduleImageView.isHidden = true
+        archiveImageView.isHidden = true
+        deleteImageView.isHidden = true
+        listImageView.isHidden = true
+        laterImageView.isHidden = true
         
+        // Main feed panel slide setup
         scrollView.contentSize = CGSize(width: 320, height: 2200)
         feedSlideOffset = 283
         feedSlide = CGPoint(x: feedPanelView.center.x + feedSlideOffset,y: feedPanelView.center.y)
-        feedHomeSlide = CGPoint(x: feedPanelView.center.x - feedSlideOffset,y: feedPanelView.center.y)
         self.feedOriginalCenter = feedPanelView.center
+        
+        // Message slide setup
+        messageSlideOffset = 60
+        self.messageOriginalCenter = messageImageView.center
+        messageSlideRight = CGPoint(x: messageImageView.center.x + messageSlideOffset,y: messageImageView.center.y)
+      messageSlideLeft = CGPoint(x: messageImageView.center.x - messageSlideOffset,y: messageImageView.center.y)
+        self.feedOriginalCenter = feedPanelView.center
+        
         print("At launch: \(feedOriginalCenter)")
     }
     
@@ -45,20 +70,22 @@ class ViewController: UIViewController {
         
         // let velocity = sender.velocity(in: view)
         let translation = sender.translation(in: view)
-        print(translation)
+        feedHomeSlide = CGPoint(x: feedOriginalCenter.x, y: feedOriginalCenter.y)
         
         if sender.state == .began {
             // self.feedOriginalCenter = self.feedPanelView.center
             
         } else if sender.state == .changed {
             self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
+            self.messageImageView.center = messageOriginalCenter
+            self.messageContainerView.backgroundColor = UIColor(red:0.91, green:0.33, blue:0.23, alpha:0.0)
             
         } else if sender.state == .ended {
             if translation.x < 0 {
                 UIView.animate(withDuration: 0.3) {
                     print("Moved left")
                     print(self.feedOriginalCenter)
-                    self.feedPanelView.center = self.feedOriginalCenter
+                    self.feedPanelView.center = self.feedHomeSlide
                     print("After sliding: \(self.feedOriginalCenter)")
                 }
             } else if translation.x > 0 {
@@ -73,8 +100,45 @@ class ViewController: UIViewController {
     }
     
     @IBAction func onMessagePanDrag(_ sender: UIPanGestureRecognizer) {
-        print("Message drag")
-    }
+        
+        var yellowColorMail: UIColor = UIColor(red:0.98, green:0.82, blue:0.27, alpha:1.0)
+        var redColorMail: UIColor = UIColor(red:0.91, green:0.33, blue:0.23, alpha:1.0)
+        
+        
+        // let velocity = sender.velocity(in: view)
+        let translation = sender.translation(in: view)
+        messageHomeSlide = CGPoint(x: messageOriginalCenter.x, y: messageOriginalCenter.y)
+        
+        if sender.state == .began {
+            // self.feedOriginalCenter = self.feedPanelView.center
+            
+        } else if sender.state == .changed {
+            self.messageImageView.center = CGPoint(x: self.messageOriginalCenter.x + translation.x, y: self.messageOriginalCenter.y)
+            
+        } else if sender.state == .ended {
+            if translation.x < 0 {
+                UIView.animate(withDuration: 0.3) {
+                    print("Message left")
+                    print(self.messageOriginalCenter)
+                    self.messageImageView.center = self.messageSlideLeft
+                    print("After sliding: \(self.feedOriginalCenter)")
+                    self.messageContainerView.backgroundColor = yellowColorMail
+                }
+            } else if translation.x > 0 {
+                UIView.animate(withDuration: 0.3) {
+                    print("Message right")
+                    self.messageImageView.center = self.messageSlideRight
+                    self.messageContainerView.backgroundColor = redColorMail
+                }
+            }
+        }
+    } // The end of the message drag
+    
+    @IBAction func onMessageTapped(_ sender: UITapGestureRecognizer) {
+        self.messageImageView.center = messageOriginalCenter
+        self.messageContainerView.backgroundColor = UIColor(red:0.91, green:0.33, blue:0.23, alpha:0.0)
+    } // The end of the message tapped
+    
     
 } // The end
 
