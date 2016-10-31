@@ -96,28 +96,27 @@ class ViewController: UIViewController {
         let translation = sender.translation(in: view)
         feedHomeSlide = CGPoint(x: feedOriginalCenter.x, y: feedOriginalCenter.y)
         
+        self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
+        
         if sender.state == .began {
-            // self.feedOriginalCenter = self.feedPanelView.center
+             self.feedPanelView.center = self.feedPanelView.center
             
         } else if sender.state == .changed {
-            self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
-            // move thi
-            self.messageImageView.center = messageOriginalCenter
+//            self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
+//            self.messageImageView.center = messageOriginalCenter
             self.messageContainerView.backgroundColor = UIColor(red:0.91, green:0.33, blue:0.23, alpha:0.0)
             
         } else if sender.state == .ended {
             if translation.x < 0 {
                 UIView.animate(withDuration: 0.3) {
                     print("Moved left")
-                    print(self.feedOriginalCenter)
-                    self.feedPanelView.center = self.feedHomeSlide
-                    print("After sliding: \(self.feedOriginalCenter)")
+//                    self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
+//                    self.feedOriginalCenter = self.feedPanelView.center
+                    self.feedPanelView.center = self.feedOriginalCenter
                 }
             } else if translation.x > 0 {
                 UIView.animate(withDuration: 0.3) {
                     print("Moved right")
-                    // self.feedPanelView.center = self.feedSlide
-                    
                     self.feedPanelView.center = self.feedSlide
                 }
             }
@@ -133,6 +132,8 @@ class ViewController: UIViewController {
         if sender.state == .began {
             
         } else if sender.state == .changed {
+            print(translation)
+            
             if translation.x > 0 && translation.x < 60 {
                 // show grey, sliding right
                 print("grey - sliding right")
@@ -180,7 +181,6 @@ class ViewController: UIViewController {
                 self.listImageView.isHidden = false
             }
             
-            // what does this do?
             self.messageImageView.center = CGPoint(x: self.messageOriginalCenter.x + translation.x, y: self.messageOriginalCenter.y)
             
         } else if sender.state == .ended {
@@ -197,9 +197,9 @@ class ViewController: UIViewController {
                     print("Message right")
                     self.messageImageView.center = self.messageOriginalCenter
                 }
-            } else if translation.x >= -60.0 {
-                self.rescheduleImageView.isHidden = false
+            } else if translation.x <= -60 {
                 print("it should show")
+                self.rescheduleImageView.isHidden = false
             }
         }
     } // The end of the message drag
