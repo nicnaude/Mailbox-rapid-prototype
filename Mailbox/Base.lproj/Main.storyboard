@@ -96,8 +96,12 @@
                                         <color key="tintColor" red="0.30990391969680786" green="0.70443427562713623" blue="0.83429193496704102" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </segmentedControl>
                                     <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" image="reschedule" id="RIc-aY-zGY">
-                                        <rect key="frame" x="0.0" y="19" width="320" height="568"/>
+                                        <rect key="frame" x="0.0" y="20" width="320" height="568"/>
                                         <autoresizingMask key="autoresizingMask"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="tO5-a8-ybi" appends="YES" id="TC7-Eb-BYO"/>
+                                        </connections>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -120,6 +124,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <screenEdgePanGestureRecognizer minimumNumberOfTouches="1" id="0ZF-GN-7X7">
+                    <connections>
+                        <action selector="onScreenEdgePanned:" destination="BYZ-38-t0r" id="3hc-8N-qyv"/>
+                    </connections>
+                </screenEdgePanGestureRecognizer>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="geM-Zh-kTh">
                     <connections>
                         <action selector="onPanButtonDrag:" destination="BYZ-38-t0r" id="oLu-b0-qJe"/>
@@ -139,6 +148,11 @@
                 <tapGestureRecognizer id="D0f-PB-SlF" userLabel="Button Tap Gesture Recognizer">
                     <connections>
                         <action selector="onHamburgerTapped:" destination="BYZ-38-t0r" id="9HG-bw-e2D"/>
+                    </connections>
+                </tapGestureRecognizer>
+                <tapGestureRecognizer id="tO5-a8-ybi" userLabel="Overlay tap Gesture Recognizer">
+                    <connections>
+                        <action selector="onOverlayTapped:" destination="BYZ-38-t0r" id="7r9-rd-vtE"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>

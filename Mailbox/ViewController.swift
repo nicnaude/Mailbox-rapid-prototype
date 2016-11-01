@@ -99,19 +99,19 @@ class ViewController: UIViewController {
         self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
         
         if sender.state == .began {
-             self.feedPanelView.center = self.feedPanelView.center
+            self.feedPanelView.center = self.feedPanelView.center
             
         } else if sender.state == .changed {
-//            self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
-//            self.messageImageView.center = messageOriginalCenter
+            //            self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
+            //            self.messageImageView.center = messageOriginalCenter
             self.messageContainerView.backgroundColor = UIColor(red:0.91, green:0.33, blue:0.23, alpha:0.0)
             
         } else if sender.state == .ended {
             if translation.x < 0 {
                 UIView.animate(withDuration: 0.3) {
                     print("Moved left")
-//                    self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
-//                    self.feedOriginalCenter = self.feedPanelView.center
+                    //                    self.feedPanelView.center = CGPoint(x: self.feedOriginalCenter.x + translation.x, y: self.feedOriginalCenter.y)
+                    //                    self.feedOriginalCenter = self.feedPanelView.center
                     self.feedPanelView.center = self.feedOriginalCenter
                 }
             } else if translation.x > 0 {
@@ -122,10 +122,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    
-    @IBAction func onMessagePanDrag(_ sender: UIPanGestureRecognizer) {
-        
-        // let velocity = sender.velocity(in: view)
+    @IBAction func onScreenEdgePanned(_ sender: UIScreenEdgePanGestureRecognizer) {
         let translation = sender.translation(in: view)
         messageHomeSlide = CGPoint(x: messageOriginalCenter.x, y: messageOriginalCenter.y)
         
@@ -202,6 +199,89 @@ class ViewController: UIViewController {
                 self.rescheduleImageView.isHidden = false
             }
         }
+        
+    }
+    
+    @IBAction func onMessagePanDrag(_ sender: UIPanGestureRecognizer) {
+        let translation = sender.translation(in: view)
+        messageHomeSlide = CGPoint(x: messageOriginalCenter.x, y: messageOriginalCenter.y)
+        
+        if sender.state == .began {
+            
+        } else if sender.state == .changed {
+            print(translation)
+            
+            if translation.x > 0 && translation.x < 60 {
+                // show grey, sliding right
+                print("grey - sliding right")
+                self.messageContainerView.backgroundColor = greyColorMail
+                
+            } else if translation.x >= 60 && translation.x < 170 {
+                // show green
+                print("green – sliding right")
+                self.messageContainerView.backgroundColor = greenColorMail
+                self.archiveImageView.isHidden = false
+                self.deleteImageView.isHidden = true
+                self.laterImageView.isHidden = true
+                self.listImageView.isHidden = true
+                
+            } else if translation.x >= 170 {
+                // show red
+                print("red – sliding right")
+                self.messageContainerView.backgroundColor = self.redColorMail
+                self.archiveImageView.isHidden = true
+                self.deleteImageView.isHidden = false
+                self.laterImageView.isHidden = true
+                self.listImageView.isHidden = true
+                
+            } else if translation.x < 0 && translation.x > -60 {
+                // show grey, sliding left
+                print("grey – sliding left")
+                self.messageContainerView.backgroundColor = greyColorMail
+                
+            } else if translation.x <= -60 && translation.x > -170 {
+                // show yellow
+                print("yellow – sliding left")
+                self.messageContainerView.backgroundColor = self.yellowColorMail
+                self.archiveImageView.isHidden = true
+                self.deleteImageView.isHidden = true
+                self.laterImageView.isHidden = false
+                self.listImageView.isHidden = true
+                
+            } else if translation.x <= -170 {
+                // show brown
+                print("brown – sliding left")
+                self.messageContainerView.backgroundColor = self.brownColorMail
+                self.archiveImageView.isHidden = true
+                self.deleteImageView.isHidden = true
+                self.laterImageView.isHidden = true
+                self.listImageView.isHidden = false
+            }
+            
+            self.messageImageView.center = CGPoint(x: self.messageOriginalCenter.x + translation.x, y: self.messageOriginalCenter.y)
+            
+        } else if sender.state == .ended {
+            if translation.x < 0 {
+                UIView.animate(withDuration: 0.3) {
+                    print("Message left")
+                    print("messageOriginalCenter: \(self.messageOriginalCenter)")
+                    print("translation: \(translation)")
+                    self.messageImageView.center = self.messageOriginalCenter
+                    print("After sliding: \(self.feedOriginalCenter)")
+                    
+                    if translation.x <= -60 && translation.x <= -100 {
+                        UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseInOut, animations: {
+                            self.rescheduleImageView.isHidden = false
+                        }, completion: nil)
+                    }
+                }
+            } else if translation.x > 0 {
+                UIView.animate(withDuration: 0.3) {
+                    print("Message right")
+                    self.messageImageView.center = self.messageOriginalCenter
+                }
+            }
+        }
     } // The end of the message drag
     
     @IBAction func onMessageTapped(_ sender: UITapGestureRecognizer) {
@@ -213,5 +293,10 @@ class ViewController: UIViewController {
         feedHomeSlide = CGPoint(x: feedOriginalCenter.x, y: feedOriginalCenter.y)
     }
     
+    @IBAction func onOverlayTapped(_ sender: UITapGestureRecognizer) {
+        UIView.animate(withDuration: 0.3) {
+            self.rescheduleImageView.isHidden = true
+        }
+    }
 } // The end
 
