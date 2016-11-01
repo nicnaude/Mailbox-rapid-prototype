@@ -1,6 +1,6 @@
 ## Mailbox
 
-CodePath Project: The purpose of this prototype is to simulate the user's experience while using the Mailbox app to swipe cells and view the slide out menu. This demo utilizes iOS gesture recognizers for panning and tapping. 
+CodePath Project: The purpose of this prototype is to simulate the user's experience while using the Mailbox app to swipe cells and view the slide out menu. This demo utilises iOS gesture recognisers for panning and tapping. 
 
 Time spent: 12 hours
 
@@ -34,4 +34,5 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 ### Video Walkthrough
 
 1. A few times I encountered if statements that would not executing upon the correct translation parameters.
-2. Main feed view skipped while dragging from right to left.
+2. Main feed view skipped while dragging from right to left. 
+
