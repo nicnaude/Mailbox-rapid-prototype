@@ -56,7 +56,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Hide items
         menuImageView.isHidden = true
-        rescheduleImageView.isHidden = true
+        self.rescheduleImageView.alpha = 0
         archiveImageView.isHidden = true
         deleteImageView.isHidden = true
         listImageView.isHidden = true
@@ -196,7 +196,7 @@ class ViewController: UIViewController {
                 }
             } else if translation.x <= -60 {
                 print("it should show")
-                self.rescheduleImageView.isHidden = false
+                self.rescheduleImageView.alpha = 0
             }
         }
         
@@ -215,6 +215,10 @@ class ViewController: UIViewController {
                 // show grey, sliding right
                 print("grey - sliding right")
                 self.messageContainerView.backgroundColor = greyColorMail
+                self.archiveImageView.isHidden = true
+                self.deleteImageView.isHidden = true
+                self.laterImageView.isHidden = true
+                self.listImageView.isHidden = true
                 
             } else if translation.x >= 60 && translation.x < 170 {
                 // show green
@@ -238,6 +242,10 @@ class ViewController: UIViewController {
                 // show grey, sliding left
                 print("grey – sliding left")
                 self.messageContainerView.backgroundColor = greyColorMail
+                self.archiveImageView.isHidden = true
+                self.deleteImageView.isHidden = true
+                self.laterImageView.isHidden = true
+                self.listImageView.isHidden = true
                 
             } else if translation.x <= -60 && translation.x > -170 {
                 // show yellow
@@ -269,9 +277,9 @@ class ViewController: UIViewController {
                     self.messageImageView.center = self.messageOriginalCenter
                     print("After sliding: \(self.feedOriginalCenter)")
                     
-                    if translation.x <= -60 && translation.x <= -100 {
-                        UIView.animate(withDuration: 0.5, delay: 0.5, options: .curveEaseInOut, animations: {
-                            self.rescheduleImageView.isHidden = false
+                    if translation.x <= 100 && translation.x <= 60  {
+                        UIView.animate(withDuration: 0.3, delay: 0.1, options: .curveEaseInOut, animations: {
+                            self.rescheduleImageView.alpha = 1.0
                         }, completion: nil)
                     }
                 }
@@ -284,18 +292,22 @@ class ViewController: UIViewController {
         }
     } // The end of the message drag
     
+    
     @IBAction func onMessageTapped(_ sender: UITapGestureRecognizer) {
+        print("tap")
         self.messageImageView.center = messageOriginalCenter
         self.messageContainerView.backgroundColor = UIColor(red:0.91, green:0.33, blue:0.23, alpha:0.0)
     } // The end of the message tapped
+    
     
     @IBAction func onHamburgerTapped(_ sender: UITapGestureRecognizer) {
         feedHomeSlide = CGPoint(x: feedOriginalCenter.x, y: feedOriginalCenter.y)
     }
     
+    
     @IBAction func onOverlayTapped(_ sender: UITapGestureRecognizer) {
         UIView.animate(withDuration: 0.3) {
-            self.rescheduleImageView.isHidden = true
+            self.rescheduleImageView.alpha = 0
         }
     }
 } // The end
